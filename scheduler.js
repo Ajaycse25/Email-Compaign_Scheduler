@@ -3,7 +3,7 @@ import Campaign from "./models/Campaign.js";
 import { sendEmail } from "./emailSender.js";
 
 cron.schedule("* * * * *", async () => {
-  console.log("🔁 Checking for campaigns to send...");
+  console.log("Checking for campaigns to send...");
 
   const now = new Date();
   const campaigns = await Campaign.find({
@@ -17,10 +17,10 @@ cron.schedule("* * * * *", async () => {
     for (const recipient of campaign.recipients) {
       try {
         await sendEmail(recipient.email, campaign.title, campaign.message);
-        console.log(`✅ Email sent to ${recipient.email}`);
+        console.log(` Email sent to ${recipient.email}`);
         recipient.status = "sent";
       } catch (err) {
-        console.error(`❌ Failed to send to ${recipient.email}:`, err.message || err);
+        console.error(` Failed to send to ${recipient.email}:`, err.message || err);
         recipient.status = "failed";
         allSuccess = false;
       }
