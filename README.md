@@ -1,0 +1,26 @@
+// MongoDB schema 
+
+import mongoose from "mongoose";
+
+const recipientSchema = new mongoose.Schema({
+  email: String,
+  status: {
+    type: String,
+    enum: ["pending", "sent", "failed"],
+    default: "pending"
+  }
+});
+
+const campaignSchema = new mongoose.Schema({
+  title: String,
+  message: String,
+  scheduledTime: Date,
+  recipients: [recipientSchema],
+  status: {
+    type: String,
+    enum: ["pending", "sent", "failed"],
+    default: "pending"
+  }
+});
+
+export default mongoose.model("Campaign", campaignSchema);
