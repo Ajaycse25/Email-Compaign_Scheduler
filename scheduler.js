@@ -1,24 +1,32 @@
-import cron from 'node-cron';
-import Campaign from './models/Campaign.js';
-import { sendEmail } from './emailSender.js';
+import cron from "node-cron";
+import Campaign from "./models/Campaign.js";
+import { sendEmail } from "./emailSender.js";
 
-cron.schedule('* * * * *', async () => {
+cron.schedule("* * * * *", async () => {
+  console.log("🔁 Checking for campaigns to send...");
+
   const now = new Date();
-  const campaigns = await Campaign.find({ scheduledTime: { $lte: now }, status: 'pending' });
+  const campaigns = await Campaign.find({
+    status: "pending",
+    scheduledTime: { $lte: now }
+  });
 
   for (const campaign of campaigns) {
-    let allSent = true;
-    for (let recipient of campaign.recipients) {
+    let allSuccess = true;
+
+    for (const recipient of campaign.recipients) {
       try {
         await sendEmail(recipient.email, campaign.title, campaign.message);
-        recipient.status = 'sent';
-      } catch {
-        recipient.status = 'failed';
-        allSent = false;
+        console.log(`✅ Email sent to ${recipient.email}`);
+        recipient.status = "sent";
+      } catch (err) {
+        console.error(`❌ Failed to send to ${recipient.email}:`, err.message || err);
+        recipient.status = "failed";
+        allSuccess = false;
       }
     }
 
-    campaign.status = allSent ? 'sent' : 'failed';
+    campaign.status = allSuccess ? "sent" : "failed";
     await campaign.save();
   }
 });

@@ -3,6 +3,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const sendEmail = async (to, subject, html) => {
+  // Clean the recipient email address
+  const recipient = String(to).replace(/['"]/g, '').trim();
+
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -13,7 +16,7 @@ export const sendEmail = async (to, subject, html) => {
 
   return transporter.sendMail({
     from: `"Campaign Scheduler" <${process.env.EMAIL_USER}>`,
-    to,
+    to: recipient,
     subject,
     html
   });
