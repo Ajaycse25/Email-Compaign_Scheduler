@@ -1,0 +1,30 @@
+<div class="container">
+  <h2>All Campaigns</h2>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Scheduled Time</th>
+        <th>Recipients</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each campaigns}}
+      <tr>
+        <td>{{this.title}}</td>
+        <td>{{this.status}}</td>
+        <td>{{this.scheduledTime}}</td>
+        <td>
+          {{#each this.recipients}}
+          {{this.email}} - {{this.status}}<br />
+          {{/each}}
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <a href="/">Back to Home</a>
+
+
+</div>

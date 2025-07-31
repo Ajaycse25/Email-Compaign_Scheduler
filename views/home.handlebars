@@ -1,0 +1,15 @@
+<div class="container">
+    <h1>Email Campaign Scheduler</h1>
+    <form method="POST" action="/api/campaigns">
+        <input name="title" placeholder="Campaign Title" required />
+        <br />
+        <textarea name="message" placeholder="Message (HTML allowed)" required></textarea>
+        <br />
+        <input name="recipients" placeholder="Emails (comma separated)" required />
+        <br />
+        <input type="datetime-local" name="scheduledTime" required />
+        <br />
+        <button type="submit">Create Campaign</button>
+    </form>
+    <a href="/campaigns">View Campaigns</a>
+</div>
